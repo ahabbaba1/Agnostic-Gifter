@@ -10,6 +10,7 @@
 import csv, random, smtplib, constants
 
 # read in + parse CSV
+# TODO: what's the format of each deet in deets?
 def read_csv(filename):
 	deets = []
 	with open(filename, "r") as f:
@@ -32,15 +33,17 @@ def assign_giftees(smtp_session, peeps):
 		# randomly pick a giftee from pool
 		rand = random.randint(0, len(possible_giftees) - 1)	
 
-		# send mail to sender
-		message =  ("Welcome to the first ever salam halal pair-based gift exchange" +
+		# send mail to gifter
+		text =  ("Welcome to the first ever salam halal pair-based gift exchange " +
 					peep[1] + "!!!!!!!\n\n" +
        			    "Your assigned secret giftee is " +
-       				possible_giftees[rand][1] + "\n\n" +
+       				possible_giftees[rand][1] + " *cue excitement and joy* \n\n" +
        				"After doing some very complicated maths, lots of calculations and " + 
 					"emphatically x-ing out dates, gift exchange will take place on *DECEMBER 8th* during our weekly Wednesday night book exchange. " +
-					"Reminder that we have a $30 cap on gift value! \n\n" +
+					"Reminder that we have a $30 cap on gift value.\n\n" +
 					"Have a non-denominational, completely non-offensive, totally generic and politically correct winter!")
+
+		message = 'Subject: {}\n\n{}'.format("SSS Gift Exchange!", text)
 		send_mail(smtp_session, peep[2], message)
 
 		# append to gift exchange summary 
@@ -67,7 +70,8 @@ def send_mail(smtp_session, receiver, message):
 
 def close_mail_session(smtp_session):
 	smtp_session.quit()
-	
+
+# send summary of gift exchange (who is gifting who) to two additional parties
 def email_n_parties_summaries(smtp_session, summary):
 	send_mail(smtp_session, constants.THIRD_PARTY_EMAIL, summary)
 	send_mail(smtp_session, constants.FOURTH_PARTY_EMAIL, summary)
@@ -77,4 +81,4 @@ names = read_csv(constants.FILENAME)
 s = setup_mail()
 summary = assign_giftees(s, names)
 email_n_parties_summaries(s, summary)
-close_mail_session
+close_mail_session(s)
