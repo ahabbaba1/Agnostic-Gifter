@@ -1,3 +1,4 @@
 strings.csv
 test_strings.csv
-credentials.json
+constants.py
+__pycache__/
