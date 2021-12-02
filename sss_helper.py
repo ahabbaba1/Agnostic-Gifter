@@ -11,7 +11,7 @@ import csv
 import random
 
 # read in + parse CSV
-def readCSV(filename):
+def read_csv(filename):
 	deets = []
 	with open(filename, "r") as f:
 		content = csv.reader(f)
@@ -46,5 +46,5 @@ def assign_giftees(peeps):
 
 
 # bb driver (icu ansel)
-names = readCSV("strings.csv")
+names = read_csv("strings.csv")
 assign_giftees(names)
